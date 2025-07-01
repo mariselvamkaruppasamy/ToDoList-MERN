@@ -6,8 +6,10 @@ import axios from 'axios';
 const Home = () => {
 
     const [notes, setNotes] = useState([]);
-    const [inpt, setInpt] = useState('');
+    const [tazk, setTazk] = useState('');
     const [darkmode, setDarkmode] = useState(false);
+    const [reminderDate, setReminderDate] = useState('');
+    const [reminderTime, setReminderTime] = useState('');
 
     // Fetch todos
     const fetchTodos = async () => {
@@ -21,12 +23,13 @@ const Home = () => {
 
     // Add new todo
     const addDoto = async () => {
-        if (inpt.trim() === '') {
+        if (tazk.trim() === '') {
+            alert('Please Enter your Task..')
             return;
         }
         try {
-            await axios.post('http://localhost:5000/api/todos', { task: inpt });
-            setInpt('');
+            await axios.post('http://localhost:5000/api/todos', { task: tazk });
+            setTazk('');
             fetchTodos();
         } catch (err) {
             console.log("Error adding todo", err);
@@ -52,16 +55,27 @@ const Home = () => {
         setDarkmode(!darkmode);
     }
 
+    const today = new Date().toISOString().split('T')[0];
+
     return (
         <div className={darkmode ? 'ctn dark' : 'ctn light'}>
-            <h1>TODO LIST</h1>
+            <h1>TODO LIST⏰</h1>
             <div className="frm">
                 <form className='inpt-form'>
                     <input type="text"
-                        placeholder='Type..'
+                        placeholder='Add your Task'
                         required
-                        value={inpt}
-                        onChange={(e) => setInpt(e.target.value)}
+                        value={tazk}
+                        onChange={(e) => setTazk(e.target.value)}
+                    />
+                    <input type="date"
+                        min={today}
+                        value={reminderDate}
+                        onChange={(e) => setReminderDate(e.target.value)}
+                    />
+                    <input type="time"
+                        value={reminderTime}
+                        onChange={(e)=> setReminderTime(e.target.value)}
                     />
                     <button onClick={addDoto}>ADD</button>
                     <div className='moon-box'>

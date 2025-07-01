@@ -19,10 +19,10 @@
     font-weight: 900;
     font-family: cursive;
     text-shadow: 1px 1px 2px black;
-    animation: goa 5s infinite;
+    animation: todo 5s infinite;
 }
 
-@keyframes goa {
+@keyframes todo {
     25% {
         font-family: cursive;
         color: rgb(187, 0, 255);
