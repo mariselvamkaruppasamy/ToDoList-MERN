@@ -23,4 +23,17 @@ router.get('/', async(req, res) =>{
     }
 });
 
+// Delete ToDo
+router.delete('/:id', async (req, res)=>{
+    try{
+        const deleted = await Todo.findByIdAndDelete(req.params.id);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Todo not found' });
+        }
+        res.status(200).json({ message: 'Todo deleted successfully' });
+    }catch(err){
+        console.error('DELETE error:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
 module.exports = router;

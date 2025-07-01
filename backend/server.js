@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const todoRoutes = require('./routes/todoRoutes');
 
+// Load environment variables
 dotenv.config();
 const app = express();
 
@@ -15,3 +16,11 @@ app.use(express.json());
 app.use('/api/todos', todoRoutes);
 
 // MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+.then(()=>{
+    console.log('MongoDB Connected Successfully..');
+    app.listen(process.env.PORT, ()=>{
+        console.log(`Server is running on port ${process.env.PORT}`);
+    });
+})
+.catch(err => console.log('MongoDB Connection Failed', err));
