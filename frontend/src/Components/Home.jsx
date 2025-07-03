@@ -40,10 +40,10 @@ const Home = () => {
             reminderTime
         };
 
-        if (task.trim() === '') {
-            alert('Please Enter your Task..')
-            return;
-        }
+        // if (task.trim() === '') {
+        //     alert('Please Enter your Task..')
+        //     return;
+        // }
         try {
             await axios.post('http://localhost:5000/api/todos', demo);
             setTazk('');
