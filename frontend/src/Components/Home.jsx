@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react'
-// import { FaRegMoon } from "react-icons/fa";
 import { RxUpdate } from "react-icons/rx";
 import './Home.css'
 import axios from 'axios';
 import UpdateForm from './UpdateForm';
 import { TextField } from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Home = () => {
 
     const [notes, setNotes] = useState([]);
     const [task, setTazk] = useState('');
-    // const [darkmode, setDarkmode] = useState(false);
     const [reminderDate, setReminderDate] = useState('');
     const [reminderTime, setReminderTime] = useState('');
     const [selectedTodo, setSelectedTodo] = useState(null);
+    const [userName, setUserName] = useState('');
 
     // Fetch todos
     const fetchTodos = async () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            return;
+        };
         try {
-            const res = await axios.get('http://localhost:5000/api/todos');
+            const res = await axios.get(`http://localhost:5000/api/todos/user/${userId}`);
             setNotes(res.data);
         } catch (err) {
             console.log('Error fetching todos:', err);
@@ -34,18 +38,26 @@ const Home = () => {
             return;
         }
 
+        const userId = localStorage.getItem('userId');
+
         const demo = {
             task,
             reminderDate,
-            reminderTime
+            reminderTime,
+            user: userId
         };
 
-        // if (task.trim() === '') {
-        //     alert('Please Enter your Task..')
-        //     return;
-        // }
+        console.log("Sending Todo:", {
+            task,
+            reminderDate,
+            reminderTime,
+            user: localStorage.getItem('userId')
+        });
+
         try {
             await axios.post('http://localhost:5000/api/todos', demo);
+            console.log("Task Payload:", demo);
+            console.log("User ID from localStorage:", userId);
             setTazk('');
             setReminderDate('');
             setReminderTime('');
@@ -88,10 +100,18 @@ const Home = () => {
         fetchTodos();
     }, []);
 
-    // const togglebg = (e) => {
-    //     e.preventDefault();
-    //     setDarkmode(!darkmode);
-    // }
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem('userId'); // Clear the user session
+        navigate('/');                     // Redirect to login page
+    };
+
+    useEffect(() => {
+        const storedName = localStorage.getItem('userName');
+        if (storedName) {
+            setUserName(storedName);
+        }
+    }, []);
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -100,7 +120,7 @@ const Home = () => {
             <h1>TODO LIST⏰</h1>
             <div className="frm">
                 <form className='inpt-form'>
-                    <TextField type="text"
+                    <input type="text"
                         placeholder='Add your Task..'
                         required
                         value={task}
@@ -116,10 +136,12 @@ const Home = () => {
                         onChange={(e) => setReminderTime(e.target.value)}
                     />
                     <button onClick={addDoto}>ADD</button>
-                    {/* <div className='moon-box'>
-                        <button onClick={togglebg}><FaRegMoon /></button>
-                    </div> */}
+
                 </form>
+                <div className="current-user">
+                    <h3>Welcome, <span>{userName}!</span></h3>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
             </div>
             <div>
                 <ul className='listz'>

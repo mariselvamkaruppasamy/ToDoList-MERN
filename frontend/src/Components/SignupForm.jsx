@@ -43,15 +43,15 @@ const SignupForm = () => {
             setEmail('');
             setPassword('');
             setConfirmPassword('')
-            navigate('/home');
+            navigate('/');
         } catch (err) {
             console.log("Error adding todo", err);
         }
     };
 
     return (
-        <div className="signup-container">
-            <form onSubmit={handleSignup}>
+        <div className="sign-stn">
+            <form onSubmit={handleSignup} className='signup-container'>
                 <h1>SignUp Form</h1>
                 <input
                     type="text"
