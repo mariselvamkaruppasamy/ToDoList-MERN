@@ -28,5 +28,7 @@ mongoose.connect(process.env.MONGO_URI)
         app.listen(process.env.PORT, () => {
             console.log(`Server is running on port ${process.env.PORT}`);
         });
+
+        require('./models/reminderCron');
     })
     .catch(err => console.log('MongoDB Connection Failed', err));

@@ -3,7 +3,7 @@ import { RxUpdate } from "react-icons/rx";
 import './Home.css'
 import axios from 'axios';
 import UpdateForm from './UpdateForm';
-import { TextField } from '@mui/material';
+// import { TextField } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Home = () => {
@@ -101,9 +101,10 @@ const Home = () => {
     }, []);
 
     const navigate = useNavigate();
+
     const handleLogout = () => {
         localStorage.removeItem('userId'); // Clear the user session
-        navigate('/');                     // Redirect to login page
+        navigate('/');
     };
 
     useEffect(() => {
@@ -117,7 +118,7 @@ const Home = () => {
 
     return (
         <div>
-            <h1>TODO LIST⏰</h1>
+            <h1>📝TODO LIST⏰</h1>
             <div className="frm">
                 <form className='inpt-form'>
                     <input type="text"
@@ -161,7 +162,6 @@ const Home = () => {
                                 <button onClick={() => deleteDoto(note._id)}>X</button>
                             </div>
                         </li>
-
                     ))}
 
                     {selectedTodo && (
