@@ -20,6 +20,7 @@ const LoginFrom = () => {
             localStorage.setItem('userName', name);
 
             alert('Login successful');
+            localStorage.setItem('userName', res.data.user.name);
             navigate('/home');
         } catch (err) {
             console.error("Login error:", err);
