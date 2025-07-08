@@ -3,7 +3,6 @@ import { RxUpdate } from "react-icons/rx";
 import './Home.css'
 import axios from 'axios';
 import UpdateForm from './UpdateForm';
-// import { TextField } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Home = () => {
@@ -15,21 +14,27 @@ const Home = () => {
     const [selectedTodo, setSelectedTodo] = useState(null);
     const [userName, setUserName] = useState('');
 
-    // Fetch todos
+    // Get task from userId
     const fetchTodos = async () => {
         const userId = localStorage.getItem('userId');
-        if (!userId) {
+        const token = localStorage.getItem('token');
+
+        if (!userId || !token) {
             return;
         };
         try {
-            const res = await axios.get(`http://localhost:5000/api/todos/user/${userId}`);
+            const res = await axios.get(`http://localhost:5000/api/todos/user/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setNotes(res.data);
         } catch (err) {
             console.log('Error fetching todos:', err);
         }
     };
 
-    // Add new todo
+    // Create Task
     const addDoto = async (e) => {
         e.preventDefault();
 
@@ -37,7 +42,7 @@ const Home = () => {
             alert('Please Enter your Task..');
             return;
         }
-
+        const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
 
         const demo = {
@@ -55,7 +60,15 @@ const Home = () => {
         });
 
         try {
-            await axios.post('http://localhost:5000/api/todos', demo);
+            await axios.post('http://localhost:5000/api/todos', demo, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => {
+                console.log('Todo created:', res.data);
+            }).catch(err => {
+                console.error('Error adding todo', err);
+            })
             console.log("Task Payload:", demo);
             console.log("User ID from localStorage:", userId);
             setTazk('');
@@ -71,7 +84,7 @@ const Home = () => {
     const deleteDoto = async (id) => {
         try {
             await axios.delete(`http://localhost:5000/api/todos/${id}`);
-            fetchTodos(); // refresh
+            fetchTodos();
         } catch (err) {
             console.log('Delete error:', err.response?.data || err.message);
         }
@@ -103,7 +116,9 @@ const Home = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('userId'); // Clear the user session
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('token');
         navigate('/');
     };
 

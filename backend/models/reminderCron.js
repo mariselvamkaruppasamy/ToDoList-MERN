@@ -1,15 +1,16 @@
 const cron = require('node-cron');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 const Todo = require('./Todo');
-const User = require('./User');
+// const User = require('./User');
+const transporter = require('../utils/mailer');
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth:{
-        user: 'mariselvamk22601@gmail.com',
-        pass: 'bqnv undv xazi ihsj'
-    }
-});
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth:{
+//         user: 'mariselvamk22601@gmail.com',
+//         pass: 'bqnv undv xazi ihsj'
+//     }
+// });
 
 cron.schedule('* * * * *', async()=>{
     const now = new Date();
@@ -29,7 +30,7 @@ cron.schedule('* * * * *', async()=>{
         const mailOptions = {
             from: 'mariselvamk22601@gmail.com',
             to: todo.user.email,
-            subject: 'Todo Reminder',
+            subject: 'Task Reminder',
             text: `Reminder: ${todo.task} at ${todo.reminderTime}`
         };
 
@@ -38,3 +39,6 @@ cron.schedule('* * * * *', async()=>{
         });
     });
 });
+
+
+module.exports = transporter;

@@ -2,8 +2,9 @@ import './App.css'
 import Home from './Components/Home'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignupForm from './Components/SignupForm'
-import LoginForm from './Components/LoginFrom'
+import LoginForm from './Components/LoginForm'
 import ProtectedRoute from './Components/ProtectedRoute';
+import ForgotPassword from './Components/ForgotPassword';
 
 function App() {
 
@@ -18,7 +19,9 @@ function App() {
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
-          } />
+          }
+        />
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
       </Routes>
     </Router>
   )
